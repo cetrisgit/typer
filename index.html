@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Keyboard Typing Practice</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Split Keyboard Typing Practice</h1>
+            <p class="subtitle">Master your ergonomic keyboard</p>
+        </header>
+
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-label">WPM</span>
+                <span class="stat-value" id="wpm">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Accuracy</span>
+                <span class="stat-value" id="accuracy">100%</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Time</span>
+                <span class="stat-value" id="timer">0s</span>
+            </div>
+        </div>
+
+        <div class="practice-area">
+            <div class="text-display" id="textDisplay">
+                <span class="text-to-type" id="textToType"></span>
+            </div>
+            <div class="input-area">
+                <input type="text" id="userInput" placeholder="Start typing..." autocomplete="off" autofocus>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="newTextBtn" class="btn">New Text</button>
+            <button id="resetBtn" class="btn">Reset</button>
+            <select id="difficulty">
+                <option value="easy">Easy</option>
+                <option value="medium" selected>Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </div>
+
+        <div class="keyboard-visual">
+            <div class="keyboard-side left-hand">
+                <h3>Left Hand</h3>
+                <div class="keyboard-layout">
+                    <div class="keyboard-row">
+                        <div class="key" data-key="q">Q</div>
+                        <div class="key" data-key="w">W</div>
+                        <div class="key" data-key="e">E</div>
+                        <div class="key" data-key="r">R</div>
+                        <div class="key" data-key="t">T</div>
+                    </div>
+                    <div class="keyboard-row">
+                        <div class="key" data-key="a">A</div>
+                        <div class="key" data-key="s">S</div>
+                        <div class="key" data-key="d">D</div>
+                        <div class="key" data-key="f">F</div>
+                        <div class="key" data-key="g">G</div>
+                    </div>
+                    <div class="keyboard-row">
+                        <div class="key" data-key="z">Z</div>
+                        <div class="key" data-key="x">X</div>
+                        <div class="key" data-key="c">C</div>
+                        <div class="key" data-key="v">V</div>
+                        <div class="key" data-key="b">B</div>
+                    </div>
+                </div>
+            </div>
+            <div class="keyboard-side right-hand">
+                <h3>Right Hand</h3>
+                <div class="keyboard-layout">
+                    <div class="keyboard-row">
+                        <div class="key" data-key="y">Y</div>
+                        <div class="key" data-key="u">U</div>
+                        <div class="key" data-key="i">I</div>
+                        <div class="key" data-key="o">O</div>
+                        <div class="key" data-key="p">P</div>
+                    </div>
+                    <div class="keyboard-row">
+                        <div class="key" data-key="h">H</div>
+                        <div class="key" data-key="j">J</div>
+                        <div class="key" data-key="k">K</div>
+                        <div class="key" data-key="l">L</div>
+                        <div class="key" data-key=";">;</div>
+                    </div>
+                    <div class="keyboard-row">
+                        <div class="key" data-key="n">N</div>
+                        <div class="key" data-key="m">M</div>
+                        <div class="key" data-key=",">,</div>
+                        <div class="key" data-key=".">.</div>
+                        <div class="key" data-key="/">/</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info">
+            <p>Practice typing to improve your speed and accuracy on your split keyboard.</p>
+            <p>The visual keyboard will highlight the next key to press.</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
