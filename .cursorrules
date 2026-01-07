@@ -1,0 +1,139 @@
+# Typer - Split Keyboard Typing Practice
+
+## Project Context
+
+This is a vanilla JavaScript web application for practicing typing on split/ergonomic keyboards. The app runs entirely in the browser with no build process, dependencies, or server required.
+
+## Tech Stack
+
+- **HTML5** - Semantic markup
+- **CSS3** - Modern styling with flexbox, transitions, and responsive design
+- **Vanilla JavaScript (ES6+)** - No frameworks or libraries
+
+## File Structure
+
+```
+typer/
+├── index.html    # Main HTML structure and UI elements
+├── style.css     # All styling including keyboard visualization
+├── app.js        # Application logic and game state management
+├── README.md     # User documentation
+└── LICENSE       # Project license
+```
+
+## Coding Standards
+
+### JavaScript
+
+- Use `const` for values that won't be reassigned, `let` for variables
+- Use arrow functions for callbacks and short functions
+- Use template literals for string interpolation
+- Use descriptive function and variable names (camelCase)
+- Keep functions small and focused on a single responsibility
+- Group related functionality together with clear comments
+- Use DOM element caching - store references to frequently accessed elements
+- Prefer `querySelector` and `querySelectorAll` for DOM selection
+- Use event delegation where appropriate
+
+### HTML
+
+- Use semantic HTML5 elements (`header`, `main`, `section`, etc.)
+- Include appropriate `aria-*` attributes for accessibility
+- Use `data-*` attributes for JavaScript hooks (e.g., `data-key`)
+- Keep class names descriptive and kebab-case
+- Maintain proper document structure and hierarchy
+
+### CSS
+
+- Use CSS custom properties (variables) for repeated values like colors
+- Mobile-first responsive design with `@media` queries
+- Use flexbox for layout
+- Keep specificity low - prefer class selectors
+- Group related styles together
+- Use transitions for smooth UI feedback
+- Maintain consistent spacing with a scale system
+
+## Design Patterns in Use
+
+### Game State Management
+The app uses a simple state object pattern with module-level variables:
+- `currentText` - The text to be typed
+- `userInputValue` - User's current input
+- `startTime` - Timer tracking
+- `errors` - Error count for accuracy calculation
+- `currentIndex` - Current position in the text
+
+### Event-Driven Architecture
+- Input events trigger display updates and stat calculations
+- Button clicks trigger state resets and text loading
+- Timer runs on an interval for real-time updates
+
+### DOM Manipulation
+- Character-by-character span creation for highlighting
+- Class toggling for visual states (correct, incorrect, current, active)
+- Real-time stat updates in dedicated display elements
+
+## Best Practices
+
+### Performance
+- Cache DOM references at module level
+- Use `classList` API for class manipulation
+- Minimize DOM reads/writes in loops
+- Clear intervals when not needed
+
+### Accessibility
+- Maintain keyboard navigability
+- Use appropriate color contrast
+- Provide clear visual feedback
+- Support screen readers with proper markup
+
+### User Experience
+- Auto-focus input field on load and reset
+- Immediate visual feedback on keystrokes
+- Clear indication of progress and errors
+- Responsive design for all screen sizes
+
+## When Making Changes
+
+1. **Adding new features**: Follow existing patterns for state management and DOM manipulation
+2. **Modifying styles**: Use existing color variables and maintain responsive breakpoints
+3. **Adding text samples**: Follow the existing difficulty structure in `textSamples` object
+4. **Keyboard layout changes**: Update both HTML elements and any related CSS
+
+## Code Organization in app.js
+
+1. **Constants/Configuration** - Text samples, difficulty levels
+2. **State Variables** - Game state tracking
+3. **DOM References** - Cached element references
+4. **Initialization** - `init()` and `setupEventListeners()`
+5. **Core Game Logic** - Text loading, input handling, display updates
+6. **Statistics** - WPM and accuracy calculations
+7. **Timer Functions** - Start, update, display
+8. **Helper Functions** - Key highlighting, animations
+
+## Common Tasks
+
+### Adding a new difficulty level
+1. Add new array to `textSamples` object in `app.js`
+2. Add corresponding `<option>` in the difficulty `<select>` in `index.html`
+
+### Adding new statistics
+1. Add HTML element with unique ID in the stats section
+2. Cache the element reference with other DOM elements
+3. Create calculation function following existing patterns
+4. Update display in `updateStats()` function
+
+### Modifying keyboard layout
+1. Update the keyboard HTML structure in `index.html`
+2. Ensure `data-key` attributes match expected characters
+3. Adjust CSS grid/flex layout if needed
+
+## Do NOT
+
+- Add external dependencies or build tools without discussion
+- Modify the simple file structure unnecessarily
+- Over-engineer solutions - keep it simple
+- Break the no-build, open-in-browser workflow
+- Use inline styles or inline JavaScript
+- Ignore mobile responsiveness
+
