@@ -7,6 +7,35 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Calibration Modal -->
+    <div id="calibrationModal" class="modal">
+        <div class="modal-content">
+            <h2>Keyboard Calibration</h2>
+            <p class="calibration-instructions">Press the keys in order to map your physical keyboard layout.</p>
+            <div class="calibration-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="calibrationProgress"></div>
+                </div>
+                <span class="progress-text" id="calibrationProgressText">0 / 50</span>
+            </div>
+            <div class="calibration-current">
+                <p>Press the key for position:</p>
+                <div class="current-key-display" id="currentKeyDisplay">
+                    <span class="hand-indicator" id="handIndicator">Left Hand</span>
+                    <span class="row-indicator" id="rowIndicator">Row 1</span>
+                    <span class="key-position" id="keyPosition">Key 1</span>
+                </div>
+            </div>
+            <div class="calibration-visual">
+                <div class="calibration-keyboard" id="calibrationKeyboard"></div>
+            </div>
+            <div class="modal-buttons">
+                <button id="skipCalibrationBtn" class="btn btn-secondary">Skip (Use Default)</button>
+                <button id="resetCalibrationBtn" class="btn btn-secondary">Restart</button>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <header>
             <h1>Split Keyboard Typing Practice</h1>
@@ -40,6 +69,7 @@
         <div class="controls">
             <button id="newTextBtn" class="btn">New Text</button>
             <button id="resetBtn" class="btn">Reset</button>
+            <button id="calibrateBtn" class="btn btn-secondary">Calibrate Keyboard</button>
             <select id="difficulty">
                 <option value="easy">Easy</option>
                 <option value="medium" selected>Medium</option>
@@ -51,52 +81,90 @@
             <div class="keyboard-side left-hand">
                 <h3>Left Hand</h3>
                 <div class="keyboard-layout">
+                    <!-- Row 1: Numbers -->
                     <div class="keyboard-row">
-                        <div class="key" data-key="q">Q</div>
-                        <div class="key" data-key="w">W</div>
-                        <div class="key" data-key="e">E</div>
-                        <div class="key" data-key="r">R</div>
-                        <div class="key" data-key="t">T</div>
+                        <div class="key" data-key="1" data-position="left-0-0">1</div>
+                        <div class="key" data-key="2" data-position="left-0-1">2</div>
+                        <div class="key" data-key="3" data-position="left-0-2">3</div>
+                        <div class="key" data-key="4" data-position="left-0-3">4</div>
+                        <div class="key" data-key="5" data-position="left-0-4">5</div>
                     </div>
+                    <!-- Row 2: QWERT -->
                     <div class="keyboard-row">
-                        <div class="key" data-key="a">A</div>
-                        <div class="key" data-key="s">S</div>
-                        <div class="key" data-key="d">D</div>
-                        <div class="key" data-key="f">F</div>
-                        <div class="key" data-key="g">G</div>
+                        <div class="key" data-key="q" data-position="left-1-0">Q</div>
+                        <div class="key" data-key="w" data-position="left-1-1">W</div>
+                        <div class="key" data-key="e" data-position="left-1-2">E</div>
+                        <div class="key" data-key="r" data-position="left-1-3">R</div>
+                        <div class="key" data-key="t" data-position="left-1-4">T</div>
                     </div>
+                    <!-- Row 3: ASDFG -->
                     <div class="keyboard-row">
-                        <div class="key" data-key="z">Z</div>
-                        <div class="key" data-key="x">X</div>
-                        <div class="key" data-key="c">C</div>
-                        <div class="key" data-key="v">V</div>
-                        <div class="key" data-key="b">B</div>
+                        <div class="key" data-key="a" data-position="left-2-0">A</div>
+                        <div class="key" data-key="s" data-position="left-2-1">S</div>
+                        <div class="key" data-key="d" data-position="left-2-2">D</div>
+                        <div class="key" data-key="f" data-position="left-2-3">F</div>
+                        <div class="key" data-key="g" data-position="left-2-4">G</div>
+                    </div>
+                    <!-- Row 4: ZXCVB -->
+                    <div class="keyboard-row">
+                        <div class="key" data-key="z" data-position="left-3-0">Z</div>
+                        <div class="key" data-key="x" data-position="left-3-1">X</div>
+                        <div class="key" data-key="c" data-position="left-3-2">C</div>
+                        <div class="key" data-key="v" data-position="left-3-3">V</div>
+                        <div class="key" data-key="b" data-position="left-3-4">B</div>
+                    </div>
+                    <!-- Row 5: Special keys -->
+                    <div class="keyboard-row">
+                        <div class="key key-special" data-key="`" data-position="left-4-0">`</div>
+                        <div class="key key-special" data-key="tab" data-position="left-4-1">Tab</div>
+                        <div class="key key-special" data-key="caps" data-position="left-4-2">Caps</div>
+                        <div class="key key-special" data-key="lshift" data-position="left-4-3">Shift</div>
+                        <div class="key key-special" data-key="lctrl" data-position="left-4-4">Ctrl</div>
                     </div>
                 </div>
             </div>
             <div class="keyboard-side right-hand">
                 <h3>Right Hand</h3>
                 <div class="keyboard-layout">
+                    <!-- Row 1: Numbers (6-0) -->
                     <div class="keyboard-row">
-                        <div class="key" data-key="y">Y</div>
-                        <div class="key" data-key="u">U</div>
-                        <div class="key" data-key="i">I</div>
-                        <div class="key" data-key="o">O</div>
-                        <div class="key" data-key="p">P</div>
+                        <div class="key" data-key="6" data-position="right-0-0">6</div>
+                        <div class="key" data-key="7" data-position="right-0-1">7</div>
+                        <div class="key" data-key="8" data-position="right-0-2">8</div>
+                        <div class="key" data-key="9" data-position="right-0-3">9</div>
+                        <div class="key" data-key="0" data-position="right-0-4">0</div>
                     </div>
+                    <!-- Row 2: YUIOP -->
                     <div class="keyboard-row">
-                        <div class="key" data-key="h">H</div>
-                        <div class="key" data-key="j">J</div>
-                        <div class="key" data-key="k">K</div>
-                        <div class="key" data-key="l">L</div>
-                        <div class="key" data-key=";">;</div>
+                        <div class="key" data-key="y" data-position="right-1-0">Y</div>
+                        <div class="key" data-key="u" data-position="right-1-1">U</div>
+                        <div class="key" data-key="i" data-position="right-1-2">I</div>
+                        <div class="key" data-key="o" data-position="right-1-3">O</div>
+                        <div class="key" data-key="p" data-position="right-1-4">P</div>
                     </div>
+                    <!-- Row 3: HJKL; -->
                     <div class="keyboard-row">
-                        <div class="key" data-key="n">N</div>
-                        <div class="key" data-key="m">M</div>
-                        <div class="key" data-key=",">,</div>
-                        <div class="key" data-key=".">.</div>
-                        <div class="key" data-key="/">/</div>
+                        <div class="key" data-key="h" data-position="right-2-0">H</div>
+                        <div class="key" data-key="j" data-position="right-2-1">J</div>
+                        <div class="key" data-key="k" data-position="right-2-2">K</div>
+                        <div class="key" data-key="l" data-position="right-2-3">L</div>
+                        <div class="key" data-key=";" data-position="right-2-4">;</div>
+                    </div>
+                    <!-- Row 4: NM,./ -->
+                    <div class="keyboard-row">
+                        <div class="key" data-key="n" data-position="right-3-0">N</div>
+                        <div class="key" data-key="m" data-position="right-3-1">M</div>
+                        <div class="key" data-key="," data-position="right-3-2">,</div>
+                        <div class="key" data-key="." data-position="right-3-3">.</div>
+                        <div class="key" data-key="/" data-position="right-3-4">/</div>
+                    </div>
+                    <!-- Row 5: Special keys -->
+                    <div class="keyboard-row">
+                        <div class="key key-special" data-key="-" data-position="right-4-0">-</div>
+                        <div class="key key-special" data-key="=" data-position="right-4-1">=</div>
+                        <div class="key key-special" data-key="[" data-position="right-4-2">[</div>
+                        <div class="key key-special" data-key="]" data-position="right-4-3">]</div>
+                        <div class="key key-special" data-key="\\" data-position="right-4-4">\</div>
                     </div>
                 </div>
             </div>
@@ -104,7 +172,7 @@
 
         <div class="info">
             <p>Practice typing to improve your speed and accuracy on your split keyboard.</p>
-            <p>The visual keyboard will highlight the next key to press.</p>
+            <p>The visual keyboard will highlight the next key to press and show which key you pressed.</p>
         </div>
     </div>
 
