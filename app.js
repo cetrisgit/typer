@@ -39,6 +39,46 @@ const defaultKeyLayout = {
     'right-4-0': '-', 'right-4-1': '=', 'right-4-2': '[', 'right-4-3': ']', 'right-4-4': '\\'
 };
 
+// Finger mapping - which finger to use for each column
+// For split keyboards: pinky=0, ring=1, middle=2, index=3-4 (left hand)
+//                      index=0-1, middle=2, ring=3, pinky=4 (right hand)
+const fingerMapping = {
+    // Left hand
+    'left-pinky': ['left-0-0', 'left-1-0', 'left-2-0', 'left-3-0', 'left-4-0'],
+    'left-ring': ['left-0-1', 'left-1-1', 'left-2-1', 'left-3-1', 'left-4-1'],
+    'left-middle': ['left-0-2', 'left-1-2', 'left-2-2', 'left-3-2', 'left-4-2'],
+    'left-index': ['left-0-3', 'left-1-3', 'left-2-3', 'left-3-3', 'left-4-3',
+                   'left-0-4', 'left-1-4', 'left-2-4', 'left-3-4', 'left-4-4'],
+    // Right hand
+    'right-index': ['right-0-0', 'right-1-0', 'right-2-0', 'right-3-0', 'right-4-0',
+                    'right-0-1', 'right-1-1', 'right-2-1', 'right-3-1', 'right-4-1'],
+    'right-middle': ['right-0-2', 'right-1-2', 'right-2-2', 'right-3-2', 'right-4-2'],
+    'right-ring': ['right-0-3', 'right-1-3', 'right-2-3', 'right-3-3', 'right-4-3'],
+    'right-pinky': ['right-0-4', 'right-1-4', 'right-2-4', 'right-3-4', 'right-4-4']
+};
+
+// Build reverse mapping: position -> finger
+const positionToFinger = {};
+for (const [finger, positions] of Object.entries(fingerMapping)) {
+    for (const pos of positions) {
+        positionToFinger[pos] = finger;
+    }
+}
+
+// Finger display names
+const fingerNames = {
+    'left-pinky': 'Pinky',
+    'left-ring': 'Ring',
+    'left-middle': 'Middle',
+    'left-index': 'Index',
+    'left-thumb': 'Thumb',
+    'right-pinky': 'Pinky',
+    'right-ring': 'Ring',
+    'right-middle': 'Middle',
+    'right-index': 'Index',
+    'right-thumb': 'Thumb'
+};
+
 // Calibration order - positions in the order they should be pressed
 // Left hand: left to right, top to bottom
 // Right hand: right to left, top to bottom
@@ -92,10 +132,19 @@ const skipCalibrationBtn = document.getElementById('skipCalibrationBtn');
 const resetCalibrationBtn = document.getElementById('resetCalibrationBtn');
 const calibrationKeyboard = document.getElementById('calibrationKeyboard');
 
+// Finger indicator elements
+const fingerIndicator = document.getElementById('fingerIndicator');
+const fingerHand = document.getElementById('fingerHand');
+const fingerHandName = document.getElementById('fingerHandName');
+const fingerNameDisplay = document.getElementById('fingerName');
+const leftHandDiagram = document.getElementById('leftHandDiagram');
+const rightHandDiagram = document.getElementById('rightHandDiagram');
+
 // Initialize
 function init() {
     loadKeyMapping();
     setupEventListeners();
+    applyFingerColorsToKeys();
     
     // Check if we need to calibrate
     if (!hasKeyMapping()) {
@@ -103,6 +152,18 @@ function init() {
     } else {
         loadNewText();
     }
+}
+
+// Apply finger color classes to keyboard keys
+function applyFingerColorsToKeys() {
+    document.querySelectorAll('.keyboard-visual .key[data-position]').forEach(key => {
+        const position = key.dataset.position;
+        const finger = positionToFinger[position];
+        if (finger) {
+            const fingerType = finger.split('-')[1]; // pinky, ring, middle, index
+            key.classList.add(`finger-${fingerType}`);
+        }
+    });
 }
 
 // Check if key mapping exists
@@ -450,8 +511,92 @@ function highlightNextKey() {
         const keyElement = document.querySelector(`.keyboard-visual .key[data-key="${nextChar}"]`);
         if (keyElement) {
             keyElement.classList.add('active');
+            // Update finger indicator
+            const position = keyElement.dataset.position;
+            updateFingerIndicator(position);
+        } else {
+            // Handle space or other keys not on visual keyboard
+            if (nextChar === ' ') {
+                updateFingerIndicator('thumb');
+            } else {
+                clearFingerIndicator();
+            }
         }
+    } else {
+        clearFingerIndicator();
     }
+}
+
+// Update the finger indicator display
+function updateFingerIndicator(position) {
+    // Handle space (thumb)
+    if (position === 'thumb') {
+        fingerHandName.textContent = 'Either Hand';
+        fingerNameDisplay.textContent = 'Thumb';
+        fingerHand.classList.remove('right-hand');
+        
+        // Highlight both thumbs
+        clearFingerHighlights();
+        leftHandDiagram.classList.add('active-hand');
+        rightHandDiagram.classList.add('active-hand');
+        document.querySelectorAll('.thumb').forEach(t => t.classList.add('active'));
+        return;
+    }
+    
+    const finger = positionToFinger[position];
+    if (!finger) {
+        clearFingerIndicator();
+        return;
+    }
+    
+    const [hand, fingerType] = finger.split('-');
+    const handName = hand === 'left' ? 'Left Hand' : 'Right Hand';
+    const displayName = fingerNames[finger] || fingerType;
+    
+    // Update text displays
+    fingerHandName.textContent = handName;
+    fingerNameDisplay.textContent = displayName;
+    
+    // Update hand icon orientation
+    if (hand === 'right') {
+        fingerHand.classList.add('right-hand');
+    } else {
+        fingerHand.classList.remove('right-hand');
+    }
+    
+    // Update finger diagram highlights
+    clearFingerHighlights();
+    
+    if (hand === 'left') {
+        leftHandDiagram.classList.add('active-hand');
+        rightHandDiagram.classList.remove('active-hand');
+    } else {
+        rightHandDiagram.classList.add('active-hand');
+        leftHandDiagram.classList.remove('active-hand');
+    }
+    
+    // Highlight the specific finger
+    const fingerElement = document.querySelector(`.finger[data-finger="${finger}"]`);
+    if (fingerElement) {
+        fingerElement.classList.add('active');
+    }
+}
+
+// Clear finger indicator highlights
+function clearFingerHighlights() {
+    document.querySelectorAll('.hand-diagram .finger, .hand-diagram .thumb').forEach(f => {
+        f.classList.remove('active');
+    });
+    leftHandDiagram.classList.remove('active-hand');
+    rightHandDiagram.classList.remove('active-hand');
+}
+
+// Clear finger indicator completely
+function clearFingerIndicator() {
+    fingerHandName.textContent = '-';
+    fingerNameDisplay.textContent = '-';
+    fingerHand.classList.remove('right-hand');
+    clearFingerHighlights();
 }
 
 // Animate key press (green flash for correct key)
